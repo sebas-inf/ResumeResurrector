@@ -35,7 +35,7 @@ def analyze_str(resume, options):
     )
     chunks = text_splitter.split_text(resume)
 
-    embeddings = OpenAIEmbeddings(openai_api_key=my_key.get_key())
+    embeddings = OpenAIEmbeddings(openai_api_key = my_key.get_key())
     knowledge_base = FAISS.from_texts(chunks, embeddings)
 
     resume_data = [{'option': option, 'value': []} for option in options]
@@ -48,7 +48,7 @@ def analyze_str(resume, options):
     for i, option in tqdm(enumerate(options), desc="Information Retrieval in progress", unit="option", ncols=100):
         question = f"What is the {option} of this candidate, please return a concise answer, up to 250 words, if not found, return 'Not provided'"
         docs = knowledge_base.similarity_search(question)
-        llm = OpenAI(openai_api_key=my_key.get_key(), temperature=0.3, model_name="text-davinci-003", max_tokens="2000")
+        llm = OpenAI(openai_api_key = my_key.get_key(), temperature=0.3, model_name="text-davinci-003", max_tokens="2000")
         chain = load_qa_chain(llm, chain_type="stuff")
         response = chain.run(input_documents=docs, question=question )
         resume_data[i]['value'] = response
