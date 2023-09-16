@@ -57,15 +57,15 @@ def analyze_str(resume, options):
         progress = (i + 1) / len(options)
         progress_bar.progress(progress)
 
-    df = pd.DataFrame(resume_data)
+    new_resume = pd.DataFrame(resume_data)
     st.success("Resume elements retrieved")
-    return df
+    return new_resume
 
 def ask_openAI(question):
     response = openai.Completion.create(
         engine="text-davinci-003",
         prompt=question,
-        max_tokens=400,
+        max_tokens=600,
         n=1,
         stop=None,
         temperature=0,
