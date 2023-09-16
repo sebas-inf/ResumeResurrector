@@ -7,6 +7,7 @@ from langchain.vectorstores import FAISS
 from langchain.chains.question_answering import load_qa_chain
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.llms import OpenAI
+from CARconverter import toCAR
 #import my_key
 
 
@@ -34,7 +35,7 @@ def analyze_str(resume, options):
     )
     chunks = text_splitter.split_text(resume)
 
-    embeddings = OpenAIEmbeddings(openai_api_key=my_key.get_key())
+    embeddings = OpenAIEmbeddings(openai_api_key = my_key.get_key())
     knowledge_base = FAISS.from_texts(chunks, embeddings)
 
     resume_data = [{'option': option, 'value': []} for option in options]
@@ -47,7 +48,7 @@ def analyze_str(resume, options):
     for i, option in tqdm(enumerate(options), desc="Information Retrieval in progress", unit="option", ncols=100):
         question = f"What is the {option} of this candidate, please return a concise answer, up to 250 words, if not found, return 'Not provided'"
         docs = knowledge_base.similarity_search(question)
-        llm = OpenAI(openai_api_key=my_key.get_key(), temperature=0.3, model_name="text-davinci-003", max_tokens="2000")
+        llm = OpenAI(openai_api_key = my_key.get_key(), temperature=0.3, model_name="text-davinci-003", max_tokens="2000")
         chain = load_qa_chain(llm, chain_type="stuff")
         response = chain.run(input_documents=docs, question=question )
         resume_data[i]['value'] = response
@@ -57,15 +58,15 @@ def analyze_str(resume, options):
         progress = (i + 1) / len(options)
         progress_bar.progress(progress)
 
-    df = pd.DataFrame(resume_data)
+    new_resume = pd.DataFrame(resume_data)
     st.success("Resume elements retrieved")
-    return df
+    return new_resume
 
 def ask_openAI(question):
     response = openai.Completion.create(
         engine="text-davinci-003",
         prompt=question,
-        max_tokens=400,
+        max_tokens=600,
         n=1,
         stop=None,
         temperature=0,
