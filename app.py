@@ -36,7 +36,7 @@ with st.sidebar:
 load_dotenv()
 def main():
     #openai.api_key = st.secrets["OPENAI_API_KEY"]
-    #openai.api_key_path = os.getenv("OPENAI_API_KEY")
+    openai.api_key_path = os.getenv("OPENAI_API_KEY")
     pdf = st.file_uploader("Upload a file", type='pdf')
 
     #st.write(pdf) #used for printing file name
