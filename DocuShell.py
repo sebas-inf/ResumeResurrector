@@ -4,3 +4,5 @@ import math
 
 def main():
     print("Hello World")
+
+main()
