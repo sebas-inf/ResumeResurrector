@@ -14,6 +14,7 @@ from streamlit_extras import add_vertical_space as avs
 from langchain.callbacks import get_openai_callback
 import base64
 import os
+import my_key
 
 st.set_page_config(page_title="Resume Reviewer", page_icon="📖")
 
