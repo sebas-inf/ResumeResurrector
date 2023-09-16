@@ -13,19 +13,14 @@ from langchain.chains.question_answering import load_qa_chain
 from streamlit_extras import add_vertical_space as avs
 from langchain.callbacks import get_openai_callback
 import os
-from design import toggle
 
 import pandas as pd
 from tqdm import tqdm
 from langchain.text_splitter import CharacterTextSplitter
 
 
-st.set_page_config (
-    page_title="Resumer Master", #name of webpage 
-      page_icon="📖"
-      )
-st.title ("Resume Building 101")
-toggle()
+st.set_page_config(page_title="Resume Reviewer", page_icon="📖")
+
 
 with st.sidebar:
     st.title("Resume Reviewer")
@@ -47,12 +42,6 @@ def analyze_resume(job_desc, resume, options):
     df_string = df.applymap(lambda x: ', '.join(x) if isinstance(x, list) else x).to_string(index=False)
     st.write("Analyzing with OpenAI..")
     summary_question = f"Job requirements: {{{job_desc}}}" + f"Resume summary: {{{df_string}}}" + "Please return a summary of the candidate's suitability for this position (limited to 200 words);'"
-
-def read_resume(jd, resume, options):
-    new_resume = analyze_str(resume, options)
-    resume_string = new_resume.applymap(lambda x: ', '.join(x) if isinstance(x, list) else x).to_string(index=False)
-    st.write("OpenAI comprehensive analysis..")
-    summary_question = f"Job requirements: {{{jd}}}" + f"Resume summary: {{{resume_string}}}" + ", please directly provide the candidate's match summary for this position (within 200 words);'"
     summary = ask_openAI(summary_question)
     df.loc[len(df)] = ['Summary', summary]
     extra_info = "Scoring criteria: Top 10 domestic universities +3 points, 985 universities +2 points, 211 universities +1 point, leading company experience +2 points, well-known company +1 point, overseas background +3 points, foreign company background +1 point."
@@ -138,54 +127,6 @@ if pdf is not None:
     resume_text = ""
     for page in pdf_reader.pages:
         resume_text += page.extract_text()
-        text = ""
-        for page in pdf_reader.pages:
-            text += page.extract_text()
-
-        text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size = 1000,
-            chunk_overlap = 200,
-            length_function = len
-            )
-        
-        chunks = text_splitter.split_text(text=text)
-
-        #st.write(chunks)
-        # # embeddings
-        store_name = pdf.name[:-4]
-        # st.write(f'{store_name}')
-        # st.write(chunks)
- 
-        if os.path.exists(f"{store_name}.pkl"):
-            with open(f"{store_name}.pkl", "rb") as f:
-                VectorStore = pickle.load(f)
-            # st.write('Embeddings Loaded from the Disk')s
-        else:
-            embeddings = OpenAIEmbeddings()
-            VectorStore = FAISS.from_texts(chunks, embedding=embeddings)
-            with open(f"{store_name}.pkl", "wb") as f:
-                pickle.dump(VectorStore, f)
- 
- 
-        # Accept user questions/query
-        query = st.text_input("Ask questions about your PDF file:")
-        # st.write(query)
- 
-        if query:
-            docs = VectorStore.similarity_search(query=query, k=3)
- 
-            llm = OpenAI()
-            chain = load_qa_chain(llm=llm, chain_type="stuff")
-            with get_openai_callback() as cb:
-                response = chain.run(input_documents=docs, question=query)
-                print(cb)
-            st.write(response)
-
-    
-
-    
-if __name__ == "__main__":
-    main()
 
 
 # Parameter input
