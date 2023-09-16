@@ -53,6 +53,7 @@ def main():
             )
         
         chunks = text_splitter.split_text(text=text)
+        #st.write(chunks)
 
         #st.write(chunks)
         # # embeddings
@@ -60,10 +61,11 @@ def main():
         # st.write(f'{store_name}')
         # st.write(chunks)
  
+    
         if os.path.exists(f"{store_name}.pkl"):
             with open(f"{store_name}.pkl", "rb") as f:
                 VectorStore = pickle.load(f)
-            # st.write('Embeddings Loaded from the Disk')s
+                st.write('Embeddings Loaded from the Disk')s
         else:
             embeddings = OpenAIEmbeddings()
             VectorStore = FAISS.from_texts(chunks, embedding=embeddings)
