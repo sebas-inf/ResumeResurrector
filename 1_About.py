@@ -19,9 +19,6 @@ from langchain.text_splitter import CharacterTextSplitter
 import requests
 import streamlit as st 
 from streamlit_lottie import st_lottie
-from PIL import Image
-
-
 
 with st.sidebar:
     st.image("panda_logo.png", caption="")
@@ -37,11 +34,6 @@ with st.sidebar:
     
     ''')
 
-
-    
-
-
-image =Image.open('teampic.jpg') 
 
 with st.container():
     left_column,right_column = st.columns(2)
@@ -61,4 +53,3 @@ lottie_coding = load_lottieurl("https://lottie.host/e6ce3de4-1da6-4d60-84d2-100f
 with right_column:
     st_lottie(lottie_coding,height =200,key="paperplane")
 
-st.image(image, caption="team")

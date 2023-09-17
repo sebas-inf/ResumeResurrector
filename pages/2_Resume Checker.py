@@ -120,17 +120,24 @@ Strictly display 5 of the least scored categories from above. Once you have revi
         HumanMessage(content= resume_text + prompt)
             ]
 
-    #progress_bar = st.progress(0)
-    #option_status = st.empty()
-
-    # for i in range(0,1000001,1):
-    #     # Update the progress bar
-        
-    #     progress =  i / 1000000
-    #     progress_bar.progress(progress)
+    progress_bar = st.progress(0)
+    option_status = st.empty()
 
     response = chat(messages)
+    
+
+    start_time = time.time()
+    while (time.time() - start_time) < 2:
+        # Update the progress bar
+            
+        progress = (time.time() - start_time) / 2
+        progress_bar.progress(progress)
+
+    
     st.write(response.content)
+    progress_bar.empty()
+
+    
 
 
 

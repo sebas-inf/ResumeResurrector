@@ -18,8 +18,10 @@ import os
 import pandas as pd
 from tqdm import tqdm
 from langchain.text_splitter import CharacterTextSplitter
+from PIL import Image
 
-
+image =Image.open('teampic.jpg') 
+st.image(image, caption="team")
 
 with st.sidebar:
     st.image("panda_logo.png", caption="")
