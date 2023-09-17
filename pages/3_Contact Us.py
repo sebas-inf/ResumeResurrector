@@ -36,11 +36,11 @@ def load_lottieurl(url):
 
 st.header("Meet the Team!")
 
-image =Image.open('./images/teampic.jpg') 
+image =Image.open('https://drive.google.com/file/d/1bBLFfvOtPWXknSs9Jtz7dHYliFAQQFOC/view?usp=sharing') 
 st.image(image, caption="The Team")
 
 with st.sidebar:
-    st.image("./images/panda_logo.png", caption="")
+    st.image("https://drive.google.com/file/d/15a2ytnjKND_U3QlCHh_U8DWGlAUNgQId/view?usp=sharing", caption="")
     st.title("Resume Resurrector")
     st.markdown('''
     This app is a LLM-powered resume reviewer built using:

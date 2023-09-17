@@ -38,7 +38,7 @@ def load_lottieurl(url):
     return r.json()
 
 with st.sidebar:
-    st.image("./images/panda_logo.png", caption="")
+    st.image("https://drive.google.com/file/d/15a2ytnjKND_U3QlCHh_U8DWGlAUNgQId/view?usp=sharing", caption="")
     st.title("Resume Resurrector")
     st.markdown('''
     This app is a LLM-powered resume reviewer built using:
