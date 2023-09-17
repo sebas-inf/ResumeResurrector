@@ -28,7 +28,7 @@ from streamlit_lottie import st_lottie
 
 
 
-st.set_page_config(page_title="Resume Reviewer", page_icon="📖")
+st.set_page_config(page_title="Resume Resurrector", page_icon="📖")
 
 
 def load_lottieurl(url):
@@ -37,21 +37,11 @@ def load_lottieurl(url):
         return None
     return r.json()
 
-with st.container():
-    left_column,right_column = st.columns(2)
-    
-lottie_coding = load_lottieurl("https://lottie.host/71a49c0d-c96c-41c6-afb7-434adbd8b01c/AbDotMP4M9.json")
-with right_column:
-    st_lottie(lottie_coding,height =200,key="paperplane")
-
-
-
 with st.sidebar:
-    st.image("panda_logo.png", caption="")
-    st.title("Resume Reviewer")
+    st.image("./images/panda_logo.png", caption="")
+    st.title("Resume Resurrector")
     st.markdown('''
-    ## About
-    This app is a LLM-powered chatbot built using:
+    This app is a LLM-powered resume reviewer built using:
     - [Streamlit](https://streamlit.io/)
     - [LangChain](https://python.langchain.com/)
     - [OpenAI](https://platform.openai.com/docs/models) LLM model
@@ -136,6 +126,8 @@ Strictly display 5 of the least scored categories from above. Once you have revi
     
     st.write(response.content)
     progress_bar.empty()
+    st.success("Done!")
+
 
     
 
