@@ -69,7 +69,7 @@ with st.container():
     
     
 
-st.image("./images/streamlitnew.jpg", caption="")
+st.image("./images/Streamlitnew.jpg", caption="")
 st.image("./images/openai2.jpg", caption="")
 st.image("./images/langchain1.png", caption="")
 st.image("./images/python1.jpg", caption="")
