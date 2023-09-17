@@ -11,7 +11,6 @@ from CARconverter import toCAR
 #import my_key
 
 
-
 def read_resume(jd, resume, options):
     new_resume = analyze_str(resume, options)
     resume_string = new_resume.applymap(lambda x: ', '.join(x) if isinstance(x, list) else x).to_string(index=False)

@@ -1,3 +1,4 @@
+#Main File
 import streamlit as st
 import openai
 from dotenv import load_dotenv
@@ -13,10 +14,9 @@ from streamlit_extras import add_vertical_space as avs
 from langchain.callbacks import get_openai_callback
 import base64
 import os
-from design import toggle
+
 import pandas as pd
 from tqdm import tqdm
 from langchain.text_splitter import CharacterTextSplitter
 
-st.write("About")
-
+st.write("Contact Us")

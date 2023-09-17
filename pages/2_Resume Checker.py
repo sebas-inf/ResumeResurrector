@@ -17,10 +17,12 @@ import os
 import pandas as pd
 from tqdm import tqdm
 from langchain.text_splitter import CharacterTextSplitter
+from design import toggle 
 
 
 st.set_page_config(page_title="Resume Reviewer", page_icon="📖")
 
+toggle()
 
 with st.sidebar:
     st.title("Resume Reviewer")
@@ -35,8 +37,7 @@ with st.sidebar:
  
     ''')
     st.write('Made by Spanish Indian Inquision')
-
-
+    
 def analyze_resume(job_desc, resume, options):
     df = analyze_str(resume, options)
     df_string = df.applymap(lambda x: ', '.join(x) if isinstance(x, list) else x).to_string(index=False)

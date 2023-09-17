@@ -24,4 +24,3 @@ def toggle():
     if on:
         st.write('Light Mode activated!')
         
-
