@@ -25,7 +25,7 @@ from PIL import Image
 st.set_page_config(page_title="Resume Resurrector", page_icon="📖")
 
 with st.sidebar:
-    st.image("https://drive.google.com/file/d/15a2ytnjKND_U3QlCHh_U8DWGlAUNgQId/view?usp=sharing", caption="")
+    st.image("./images/panda_logo.png", caption="")
     st.title("Resume Resurrector")
     st.markdown('''
     This app is a LLM-powered resume reviewer built using:
@@ -69,16 +69,13 @@ with st.container():
     
     
 
-# st.image("./images/streamlitnew.jpg", caption="")
-# st.image("./images/openai2.jpg", caption="")
-# st.image("./images/langchain1.png", caption="")
-# st.image("./images/python1.jpg", caption="")
+st.image("./images/streamlitnew.jpg", caption="")
+st.image("./images/openai2.jpg", caption="")
+st.image("./images/langchain1.png", caption="")
+st.image("./images/python1.jpg", caption="")
 
 
-st.image("https://drive.google.com/file/d/1MAcgtW3x3dnJbu8V4kinDsDWhXQZzixU/view?usp=sharing", caption="")
-st.image("https://imgur.com/a/cY4zwGZ", caption="")
-st.image("https://drive.google.com/file/d/1iq7nnNcWar16j5j76z3Lu-5LRMT92Fdx/view?usp=drive_link", caption="")
-st.image("https://drive.google.com/file/d/1h6nZ2Yg7MdZj6mUDfhz3XPjhBwbDpT8A/view?usp=sharing", caption="")
+
 
 
 
