@@ -17,12 +17,12 @@ import os
 import pandas as pd
 from tqdm import tqdm
 from langchain.text_splitter import CharacterTextSplitter
-from design import toggle 
 
 
-st.set_page_config(page_title="Resume Reviewer", page_icon="📖")
-
-toggle()
+import requests
+import streamlit as st 
+from streamlit_lottie import st_lottie
+import streamlit as st
 
 with st.sidebar:
     st.title("Resume Reviewer")

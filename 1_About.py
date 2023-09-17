@@ -14,6 +14,8 @@ import os
 import pandas as pd
 from tqdm import tqdm
 from langchain.text_splitter import CharacterTextSplitter
+from design import toggle
+toggle()
 
 
 import requests
@@ -25,7 +27,7 @@ with st.container():
     with left_column:
         st.header("Resume Resurrection")
         st.divider()
-        st.subheader("About")
+        st.write("About")
 
 def load_lottieurl(url):
     r = requests.get(url)
@@ -37,3 +39,55 @@ lottie_coding = load_lottieurl("https://lottie.host/71a49c0d-c96c-41c6-afb7-434a
 
 with right_column:
     st_lottie(lottie_coding,height =200,key="paperplane")
+
+import streamlit as st
+
+# Define a function to toggle between dark and light modes
+def toggle():
+    on = st.checkbox('Activate Light Mode')
+    if on:
+        st.set_page_config(
+            page_title="Your App Title",
+            page_icon="✅",
+            layout="centered",
+            primaryColor="#F63366",              # Dark mode primary color
+            backgroundColor="#FFFFFF",           # White background color
+            secondaryBackgroundColor="#F0F2F6",  # Secondary background color
+            textColor="#262730",                # Text color
+            font="sans serif",
+        )
+    else:
+        st.set_page_config(
+            page_title="Your App Title",
+            page_icon="✅",
+            layout="centered",
+            primaryColor="#F63366",              # Dark mode primary color
+            backgroundColor="#262730",           # Dark mode background color
+            secondaryBackgroundColor="#1E2125",  # Secondary background color
+            textColor="#FFFFFF",                # Text color in dark mode
+            font="sans serif",
+        )
+
+# Set the initial theme (dark mode by default)
+st.set_page_config(
+    page_title="Your App Title",
+    page_icon="✅",
+    layout="centered",
+    primaryColor="#F63366",              # Dark mode primary color
+    backgroundColor="#262730",           # Dark mode background color
+    secondaryBackgroundColor="#1E2125",  # Secondary background color
+    textColor="#FFFFFF",                # Text color in dark mode
+    font="sans serif",
+)
+
+# Toggle between dark and light modes
+toggle()
+
+# Rest of your Streamlit app content
+st.write("ABOUT ")
+with st.container():
+    st.write("")
+    left_column, right_column = st.columns(2)
+    with left_column:
+        st.header("Resume Resurrection")
+        st.write("About")
