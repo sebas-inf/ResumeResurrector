@@ -117,8 +117,7 @@ jd_text = st.text_area("【Job Description】", height=100, value=default_jd)
 
 
 pdf = st.file_uploader("Upload a file", type='pdf')
-st.write(pdf._)
-
+#st.write(pdf)
 
 
 if pdf is not None:
