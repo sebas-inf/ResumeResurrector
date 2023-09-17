@@ -19,11 +19,34 @@ from langchain.text_splitter import CharacterTextSplitter
 import requests
 import streamlit as st 
 from streamlit_lottie import st_lottie
+from PIL import Image
+
+
+
+with st.sidebar:
+    st.image("panda_logo.png", caption="")
+    st.title("Resume Reviewer")
+    st.markdown('''
+    ## About
+    This app is a LLM-powered chatbot built using:
+    - [Streamlit](https://streamlit.io/)
+    - [LangChain](https://python.langchain.com/)
+    - [OpenAI](https://platform.openai.com/docs/models) LLM model
+                
+
+    
+    ''')
+
+
+    
+
+
+image =Image.open('teampic.jpg') 
 
 with st.container():
     left_column,right_column = st.columns(2)
     with left_column:
-        st.header("Resume Resurrection")
+        st.header("Resume     Resurrection")
         st.divider()
         st.subheader("About")
 
@@ -33,7 +56,9 @@ def load_lottieurl(url):
         return None
     return r.json()
     
-lottie_coding = load_lottieurl("https://lottie.host/71a49c0d-c96c-41c6-afb7-434adbd8b01c/AbDotMP4M9.json")
+lottie_coding = load_lottieurl("https://lottie.host/e6ce3de4-1da6-4d60-84d2-100f97d68b37/otWBBaQhxU.json")
 
 with right_column:
     st_lottie(lottie_coding,height =200,key="paperplane")
+
+st.image(image, caption="team")

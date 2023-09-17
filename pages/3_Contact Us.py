@@ -19,4 +19,21 @@ import pandas as pd
 from tqdm import tqdm
 from langchain.text_splitter import CharacterTextSplitter
 
+
+
+with st.sidebar:
+    st.image("panda_logo.png", caption="")
+    st.title("Resume Reviewer")
+    st.markdown('''
+    ## About
+    This app is a LLM-powered chatbot built using:
+    - [Streamlit](https://streamlit.io/)
+    - [LangChain](https://python.langchain.com/)
+    - [OpenAI](https://platform.openai.com/docs/models) LLM model
+                
+
+ 
+    ''')
+
+
 st.write("Contact Us")

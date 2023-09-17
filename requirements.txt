@@ -9,3 +9,5 @@ openai
 tiktoken
 tqdm 
 pandas
+streamlit_lottie
+requests

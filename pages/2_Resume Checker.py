@@ -13,18 +13,41 @@ from langchain.chains.question_answering import load_qa_chain
 from streamlit_extras import add_vertical_space as avs
 from langchain.callbacks import get_openai_callback
 import os
+import time
 
+import requests
 import pandas as pd
 from tqdm import tqdm
 from langchain.text_splitter import CharacterTextSplitter
-from design import toggle 
+from langchain.schema import (
+    AIMessage,
+    HumanMessage,
+    SystemMessage
+) 
+from streamlit_lottie import st_lottie
+
 
 
 st.set_page_config(page_title="Resume Reviewer", page_icon="📖")
 
-toggle()
+
+def load_lottieurl(url):
+    r = requests.get(url)
+    if r.status_code !=200:
+        return None
+    return r.json()
+
+with st.container():
+    left_column,right_column = st.columns(2)
+    
+lottie_coding = load_lottieurl("https://lottie.host/71a49c0d-c96c-41c6-afb7-434adbd8b01c/AbDotMP4M9.json")
+with right_column:
+    st_lottie(lottie_coding,height =200,key="paperplane")
+
+
 
 with st.sidebar:
+    st.image("panda_logo.png", caption="")
     st.title("Resume Reviewer")
     st.markdown('''
     ## About
@@ -36,111 +59,82 @@ with st.sidebar:
 
  
     ''')
-    st.write('Made by Spanish Indian Inquision')
-    
-def analyze_resume(job_desc, resume, options):
-    df = analyze_str(resume, options)
-    df_string = df.applymap(lambda x: ', '.join(x) if isinstance(x, list) else x).to_string(index=False)
-    st.write("Analyzing with OpenAI..")
-    summary_question = f"Job requirements: {{{job_desc}}}" + f"Resume summary: {{{df_string}}}" + "Please return a summary of the candidate's suitability for this position (limited to 200 words);'"
-    summary = ask_openAI(summary_question)
-    df.loc[len(df)] = ['Summary', summary]
-    extra_info = "Scoring criteria: Top 10 domestic universities +3 points, 985 universities +2 points, 211 universities +1 point, leading company experience +2 points, well-known company +1 point, overseas background +3 points, foreign company background +1 point."
-    score_question = f"Job requirements: {{{job_desc}}}" + f"Resume summary: {{{df.to_string(index=False)}}}" + "Please return a matching score (0-100) for the candidate for this job, please score accurately to facilitate comparison with other candidates, '" + extra_info
-    score = ask_openAI(score_question)
-    df.loc[len(df)] = ['Match Score', score]
-
-    return df
-
-def ask_openAI(question):
-    response = openai.Completion.create(
-        engine="text-davinci-003",
-        prompt=question,
-        max_tokens=400,
-        n=1,
-        stop=None,
-        temperature=0,
-    )
-    return response.choices[0].text.strip()
-
-def analyze_str(resume, options):
-    text_splitter = CharacterTextSplitter(
-        separator="\n",
-        chunk_size=600,
-        chunk_overlap=100,
-        length_function=len
-    )
-    chunks = text_splitter.split_text(resume)
-
-    embeddings = OpenAIEmbeddings(openai_api_key=openai.api_key)
-    knowledge_base = FAISS.from_texts(chunks, embeddings)
-
-    df_data = [{'option': option, 'value': []} for option in options]
-    st.write("Fetching information")
-
-    # Create a progress bar and an empty element
-    progress_bar = st.progress(0)
-    option_status = st.empty()
-
-    for i, option in tqdm(enumerate(options), desc="Fetching information", unit="option", ncols=100):
-        question = f"What is this candidate's {option}? Please return the answer in a concise manner, no more than 250 words. If not found, return 'Not provided'"
-        docs = knowledge_base.similarity_search(question)
-        llm = OpenAI(openai_api_key=openai.api_key, temperature=0.3, model_name="text-davinci-003", max_tokens="2000")
-        chain = load_qa_chain(llm, chain_type="stuff")
-        response = chain.run(input_documents=docs, question=question )
-        df_data[i]['value'] = response
-        option_status.text(f"Looking for information: {option}")
-
-        # Update the progress bar
-        progress = (i + 1) / len(options)
-        progress_bar.progress(progress)
-
-    df = pd.DataFrame(df_data)
-    st.success("Resume elements retrieved")
-    return df
-
-def show_pdf(file_url):
-    pdf_embed_code = f'<iframe src="{file_url}" width="700" height="500" type="application/pdf"></iframe>'
-    st.markdown(pdf_embed_code, unsafe_allow_html=True)
 
 load_dotenv()
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
+st.header("Resurrection Process")
+
 
 # Set default job description and resume information
-default_jd  = "Business Data Analyst JD: Duties: ..."
+default_role = "Software Engineer"
+default_jd  = "We are currently seeking a skilled and experienced Software Engineer to join our dynamic team. As a Software Engineer, you will play a crucial role in developing, designing, and maintaining software applications that meet the needs of our clients. You will collaborate with cross-functional teams to ensure the successful delivery of high-quality software solutions."
 default_resume = "Resume: Personal Information: ..."
 
+role_text = st.text_area("Hello User! Please provide the job role you'd like to apply for. Your resume will be judged based on this criteria", height=100, value=default_role)
+
+
 # Enter job description
-jd_text = st.text_area("【Job Description】", height=100, value=default_jd)
+jd_text = st.text_area("Please provide the job description of the job you'd like to apply for.", height=100, value=default_jd)
 
 
-pdf = st.file_uploader("Upload a file", type='pdf')
+pdf = st.file_uploader("Upload your resume for analysis!", type='pdf')
 #st.write(pdf)
 
 
 if pdf is not None:
-    pdf_reader = PdfReader(pdf)    
-    
-        
+    pdf_reader = PdfReader(pdf) 
+
+       
     resume_text = ""
     for page in pdf_reader.pages:
         resume_text += page.extract_text()
 
+    prompt = f"""
+You are a strict recruiter from top tier companies related to {role_text}. You have been assigned the task of evaluating a resume for a potential candidate with a background related to {role_text}.
+
+Please carefully review the following resume and grade it on a scale of 0 to 100, with 0 being the minimum and 100 being the maximum score. Consider the criteria mentioned below while evaluating:
+
+1. Education: Assess the candidate's academic qualifications and relevance to {role_text}. Look for degrees, courses, and educational institutions that are reputable in the field.
+
+2. Technical Skills: Evaluate the candidate's proficiency in relevant frameworks, tools, and technologies commonly used in  relation to {role_text}. Look for specific skills mentioned in the resume.
+
+3. Projects: Examine the candidate's previous projects, internships, or research work related to {role_text}. Assess the complexity, impact, and relevance of these projects.
+
+4. Experience: Consider the candidate's professional experience in the related {role_text}, including internships, part-time jobs, or full-time positions. Evaluate the duration, responsibilities, and achievements in roles related to {role_text}.
+
+5. Problem-Solving Abilities: Assess the candidate's problem-solving skills, logical reasoning, and ability to approach complex technical challenges. Look for any examples or indications of their problem-solving abilities.
+
+6. Communication: Evaluate the candidate's written communication skills based on the quality and clarity of the resume itself. This includes formatting, organization, grammar, and overall presentation.
+
+7. Additional Factors: Take into account any additional factors that you deem relevant for assessing the candidate's suitability for role.
+
+Strictly display 5 of the least scored categories from above. Once you have reviewed the resume, please STRICTLY provide your final grade from a range within 0-100 based on the factors above and provide any specific feedback or comments to justify your evaluation. 
+"""
+
+
+    chat = ChatOpenAI(model_name="gpt-3.5-turbo", temperature = 0.3)
+    messages = [
+        SystemMessage(content="You are a strict recruiter based on the following job description listed" + jd_text),
+        HumanMessage(content= resume_text + prompt)
+            ]
+
+    #progress_bar = st.progress(0)
+    #option_status = st.empty()
+
+    # for i in range(0,1000001,1):
+    #     # Update the progress bar
+        
+    #     progress =  i / 1000000
+    #     progress_bar.progress(progress)
+
+    response = chat(messages)
+    st.write(response.content)
+
+
 
 # Parameter input
-options = ["Name", "Contact Number", "Gender", "Age", "Years of Work Experience (Number)", "Highest Education", "Undergraduate School Name", "Master's School Name", "Employment Status", "Current Position", "List of Past Employers", "Technical Skills", "Experience Level", "Management Skills"]
-selected_options = st.multiselect("Please select options", options, default=options)
 
-load_dotenv()
-openai.api_key = os.getenv("OPENAI_API_KEY")
-
-# Analyze button
-if st.button("Start Analysis"):
-    df = analyze_resume(jd_text, resume_text, selected_options)
-    st.subheader("Overall Match Score: "+ df.loc[df['option'] == 'Match Score', 'value'].values[0])
-    st.subheader("Detailed Display:")
-    st.table(df)
 
 
