@@ -22,10 +22,6 @@ from streamlit_lottie import st_lottie
 
 with st.container():
     left_column,right_column = st.columns(2)
-    with left_column:
-        st.header("Resume Resurrection")
-        st.divider()
-        st.subheader("About")
 
 def load_lottieurl(url):
     r = requests.get(url)
