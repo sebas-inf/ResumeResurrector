@@ -115,7 +115,7 @@ Strictly display 5 of the least scored categories from above. Once you have revi
         progress_bar.progress(progress)
 
     
-    st.write(response.content)
+    st.write(response)
     progress_bar.empty()
     st.success("Done!")
 
