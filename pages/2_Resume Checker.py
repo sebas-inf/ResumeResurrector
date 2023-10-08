@@ -93,16 +93,18 @@ Strictly display 5 of the least scored categories from above. Once you have revi
 """
 
 
-    chat = ChatOpenAI(model_name="gpt-3.5-turbo", temperature = 0.3)
-    messages = [
-        SystemMessage(content="You are a strict recruiter based on the following job description listed" + jd_text),
-        HumanMessage(content= resume_text + prompt)
-            ]
+    chat = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": "You are a strict recruiter based on the following job description listed" + jd_text},
+            {"role": "user", "content": resume_text + prompt}
+        ]
+    )
 
     progress_bar = st.progress(0)
     option_status = st.empty()
 
-    response = chat(messages)
+    response = chat['choices'][0]['message']['content']
     
 
     start_time = time.time()
