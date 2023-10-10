@@ -1,6 +1,6 @@
 # Resume Resurrector
 
-![Logo](./images/panda_logo.png)
+![Logo](./images/inverted_panda.png)
 
 ## Description
 
