@@ -30,7 +30,7 @@ To get started with Resume Resurrector, follow these steps:
 3. Set up OpenAI API Key: Create a .env file in the project directory and add your OpenAI API key as follows:
     OPENAI_API_KEY=your_api_key_here
 4. Run the Application: Start the Streamlit app by running the following command:
-    streamlit run main.py
+    streamlit run 1_About.py
    
 ## Usage
 Enter Job Role: Provide the job role you'd like to apply for.
